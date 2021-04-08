@@ -8,7 +8,7 @@ module.exports = {
     path: path.join(__dirname, "build"),
     filename: "app.js",
   },
-  devtool: 'source-map',
+  devtool: "source-map",
   module: {
     rules: [
       {
@@ -22,16 +22,25 @@ module.exports = {
         test: /.(css|scss)$/,
         use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
       },
-	  {
+      {
         test: /\.(js|jsx)$/,
         include: path.resolve(__dirname, "static_src"),
-        loader: 'babel-loader',
+        loader: "babel-loader",
         exclude: /node_modules/,
         options: {
-            presets: ['@babel/env', '@babel/react'],
-        }
-       },
+          presets: ["@babel/env", "@babel/react"],
+          plugins: [
+            [
+              "@babel/plugin-proposal-class-properties",
+              {
+                loose: true,
+              },
+            ],
+          ],
+        },
+      },
     ],
+    //devtool: "cheap-inline-module-source-map",
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -43,4 +52,10 @@ module.exports = {
       chunkFilename: "[id].css",
     }),
   ],
+  devServer: {
+    port: 8080,
+    historyApiFallback: {
+      index: "index.html",
+    },
+  },
 };
